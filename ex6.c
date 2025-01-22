@@ -773,7 +773,7 @@ int deletePokedex(int numOfOwners)
 void printOwnersCircular()
 {
     char direction;
-    printf("Enter direction (F or B):");
+    printf("Enter direction (F or B): ");
     char buffer[INT_BUFFER];
     OwnerNode* currentOwner = ownerHead;
     int printAmount;
@@ -789,7 +789,7 @@ void printOwnersCircular()
         printf("Invalid direction, must be F or B.");
         return;
     }
-    printAmount = readIntSafe("How many prints?");
+    printAmount = readIntSafe("How many prints? ");
     if ((direction == 'f') || (direction == 'F'))
     {
         for (int i = 1; i < printAmount+1; i++)
@@ -910,7 +910,7 @@ int mergePokedexMenu(int numOfOwners)
         return -1;
     }
     printf("\n=== Merge Pokedexes ===\n");
-    printf("Enter name of first owner:");
+    printf("Enter name of first owner: ");
     char *ownerName = getDynamicInput();
     if (ownerName == NULL)
     {
@@ -919,7 +919,7 @@ int mergePokedexMenu(int numOfOwners)
     }
     OwnerNode* firstOwner = findOwnerByName(ownerName, numOfOwners);
     free(ownerName);
-    printf("Enter name of second owner:");
+    printf("Enter name of second owner: ");
     ownerName = getDynamicInput();
     if (ownerName == NULL)
     {
