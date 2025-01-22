@@ -633,7 +633,7 @@ void displayMenu(OwnerNode* owner)
     printf("4. Post-Order\n");
     printf("5. Alphabetical (by name)\n");
 
-    int choice = readIntSafe("Your choice: \n");
+    int choice = readIntSafe("Your choice: ");
 
     switch (choice)
     {
@@ -991,11 +991,11 @@ void enterExistingPokedexMenu(int numOfOwners)
         printf("6. Back to Main\n");
 
         int id;
-        subChoice = readIntSafe("Your choice: \n");
+        subChoice = readIntSafe("Your choice: ");
         switch (subChoice)
         {
         case 1:
-            id = readIntSafe("Enter ID to add: \n");
+            id = readIntSafe("Enter ID to add: ");
             if (id > MAX_ID && id < MIN_ID)
             {
                 printf("Invalid ID.\n");
