@@ -340,7 +340,7 @@ int freePokemon(OwnerNode* owner)
     PokemonNode* root = owner->pokedexRoot;
     if (owner->numOfPokemons == 0)
         return 0;
-    int id = readIntSafe("Enter Pokemon ID to release: \n");
+    int id = readIntSafe("Enter Pokemon ID to release: ");
     PokemonNode* currentPokemon = searchPokemon(root, id, owner->numOfPokemons);
     if (currentPokemon == NULL)
     {
@@ -670,7 +670,7 @@ void evolvePokemon(OwnerNode* owner)
     int numOfPokemons = owner->numOfPokemons;
     if (numOfPokemons == 0)
     {
-        printf("Pokedex is empty\n");
+        printf("Cannot evolve. Pokedex empty.");
         return;
     }
     int oldId = readIntSafe("Enter ID of Pokemon to evolve: \n");
