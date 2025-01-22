@@ -124,7 +124,7 @@ int openPokedexMenu(int numOfOwners)
         return 1;
     }
     memset(newOwner, 0x0, sizeof(OwnerNode));
-    printf("Your Name: ");
+    printf("Your name: ");
     //getting new owner's name.
     newOwner->ownerName = getDynamicInput();
     if (newOwner->ownerName == NULL)
