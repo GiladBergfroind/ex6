@@ -337,6 +337,11 @@ int removeNodeBST(PokemonNode **rootPtr, int id) {
 
 int freePokemon(OwnerNode* owner)
 {
+    if (owner->numOfPokemons == 0)
+    {
+        printf("No Pokemon to release.");
+        return 0;
+    }
     PokemonNode* root = owner->pokedexRoot;
     if (owner->numOfPokemons == 0)
         return 0;
@@ -347,7 +352,7 @@ int freePokemon(OwnerNode* owner)
         printf("No Pokemon with ID %d found.", id);
         return 0;
     }
-    printf("Removing Pokemon %s(ID %d).",currentPokemon->data->name,id);
+    printf("Removing Pokemon %s (ID %d).",currentPokemon->data->name,id);
     removeNodeBST(&root, id);
     return 1;
 }
@@ -425,8 +430,8 @@ void pokemonFight(OwnerNode* owner)
         printf("Pokedex is empty.");
         return;
     }
-    int firstId = readIntSafe("Enter ID of the first Pokemon: \n");
-    int secondId = readIntSafe("Enter ID of the second Pokemon: \n");
+    int firstId = readIntSafe("Enter ID of the first Pokemon: ");
+    int secondId = readIntSafe("Enter ID of the second Pokemon: ");
     PokemonNode* firstPokemon;
     PokemonNode* secondPokemon;
     firstPokemon = searchPokemon(owner->pokedexRoot,firstId,numOfPokemons);
@@ -768,7 +773,7 @@ int deletePokedex(int numOfOwners)
 void printOwnersCircular()
 {
     char direction;
-    printf("Enter direction (F or B):\n");
+    printf("Enter direction (F or B):");
     char buffer[INT_BUFFER];
     OwnerNode* currentOwner = ownerHead;
     int printAmount;
@@ -784,7 +789,7 @@ void printOwnersCircular()
         printf("Invalid direction, must be F or B.");
         return;
     }
-    printAmount = readIntSafe("How many prints?\n");
+    printAmount = readIntSafe("How many prints?");
     if ((direction == 'f') || (direction == 'F'))
     {
         for (int i = 1; i < printAmount+1; i++)
@@ -905,7 +910,7 @@ int mergePokedexMenu(int numOfOwners)
         return -1;
     }
     printf("\n=== Merge Pokedexes ===\n");
-    printf("Enter name of first owner:\n");
+    printf("Enter name of first owner:");
     char *ownerName = getDynamicInput();
     if (ownerName == NULL)
     {
@@ -914,7 +919,7 @@ int mergePokedexMenu(int numOfOwners)
     }
     OwnerNode* firstOwner = findOwnerByName(ownerName, numOfOwners);
     free(ownerName);
-    printf("Enter name of second owner:\n");
+    printf("Enter name of second owner:");
     ownerName = getDynamicInput();
     if (ownerName == NULL)
     {
