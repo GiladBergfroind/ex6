@@ -304,7 +304,7 @@ void swapPokemonData(PokemonNode** a, PokemonNode** b);
  * @param root BST root.
  * Why we made it: Provide user the option to see Pokemon sorted by name.
  */
-void displayAlphabetical(PokemonNode* root);
+void displayAlphabetical(OwnerNode* owner);
 
 /**
  * @brief BFS user-friendly display (level-order).
@@ -358,7 +358,7 @@ void evolvePokemon(OwnerNode* owner);
  * @param id the id of the wanted pokemon
  * Why we made it: Primary user function for adding new Pokemon to an owner’s Pokedex.
  */
-int addPokemon(OwnerNode* owner,int id);
+int addPokemon(PokemonNode* root,int id,OwnerNode* owner);
 
 /**
  * @brief Prompt for ID, remove that Pokemon from BST by ID.
@@ -386,7 +386,7 @@ void displayMenu(OwnerNode* owner);
     * @brief Sort the circular owners list by name.
     * Why we made it: Another demonstration of pointer manipulation + sorting logic.
     */
-void sortOwners(void);
+void sortOwners(int numOfOwners);
 
 /**
  * @brief Helper to swap name & pokedexRoot in two OwnerNode.
@@ -420,7 +420,7 @@ void removeOwnerFromCircularList(OwnerNode* target);
  * @return pointer to the matching OwnerNode or NULL
  * Why we made it: We often need to locate an owner quickly.
  */
-OwnerNode* findOwnerByName(const char* name);
+OwnerNode* findOwnerByName(const char* name, int numOfOwners);
 
 /* ------------------------------------------------------------
    10) Owner Menus
@@ -463,7 +463,7 @@ int mergePokedexMenu(int numOfOwners);
     * @param direction F,f,B or b.
     * Why we made it: Demonstrates stepping through a circular list in a chosen direction.
     */
-void printOwnersCircular(char direction);
+void printOwnersCircular();
 
 /* ------------------------------------------------------------
    12) Cleanup All Owners at Program End
