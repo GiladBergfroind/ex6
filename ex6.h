@@ -2,7 +2,7 @@
 #define EX6_H
 #define MAX_ID 151
 #define MIN_ID 1
-
+#define MAX_NAME 21
 
 #include <ctype.h>
 #include <stdio.h>
@@ -38,7 +38,7 @@ typedef enum
 typedef struct PokemonData
 {
     int id;
-    char* name;
+    char name[MAX_NAME];
     PokemonType TYPE;
     int hp;
     int attack;
@@ -56,7 +56,8 @@ typedef struct PokemonNode
 // Linked List Node (for Owners)
 typedef struct OwnerNode
 {
-    char* ownerName;          // Owner's name
+//    char ownerName[MAX_NAME]; // Owner's name
+    char* ownerName; // Owner's name
     int numOfPokemons;        // Num of pokemons in the owner's Pokedex
     PokemonNode* pokedexRoot; // Pointer to the root of the owner's Pokédex
     struct OwnerNode* next;   // Next owner in the linked list
@@ -365,7 +366,7 @@ int addPokemon(PokemonNode* root,int id,OwnerNode* owner);
  * @param owner pointer to the Owner
  * Why we made it: Another user function for releasing a Pokemon.
  */
-void freePokemon(OwnerNode* owner);
+int freePokemon(OwnerNode* owner);
 
 /* ------------------------------------------------------------
    7) Display Menu for a Pokedex
