@@ -953,6 +953,11 @@ int mergePokedexMenu(int numOfOwners)
 // --------------------------------------------------------------
 void enterExistingPokedexMenu(int numOfOwners)
 {
+    if (numOfOwners == 0)
+    {
+        printf("No existing Pokedexes.\n");
+        return;
+    }
     // list owners
     printf("\nExisting Pokedexes:\n");
     int i = 1;
