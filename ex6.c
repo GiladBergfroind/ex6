@@ -227,7 +227,8 @@ void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
     }
     if (root->data->id > id) {
         if (root->left != NULL) {
-            return insertPokemonNode(root->left,newNode);
+            insertPokemonNode(root->left,newNode);
+            return;
         }
         root->left = createPokemonNode(&(pokedex[id - 1]));
         if (root->left == NULL)
@@ -235,7 +236,8 @@ void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
     }
     if (root->data->id < id) {
         if (root->right != NULL) {
-            return insertPokemonNode(root->right, newNode);
+            insertPokemonNode(root->right, newNode);
+            return;
         }
         root->right = createPokemonNode(&(pokedex[id - 1]));
         if (root->right == NULL) 
@@ -256,7 +258,7 @@ int addPokemon(PokemonNode *root,int id,OwnerNode* owner)
         memset(owner->pokedexRoot, 0x0, sizeof(PokemonNode));
         owner->pokedexRoot = createPokemonNode(&(pokedex[id-1]));
         printf("Pokemon %s (ID %d) added.", owner->pokedexRoot->data->name, owner->pokedexRoot->data->id);
-        return;
+        return 0;
     }
     if (root == NULL) {
         return -1;
@@ -436,8 +438,8 @@ void pokemonFight(OwnerNode* owner)
         printf("One or both Pokemon IDs not found.");
         return;
     }
-    float firstPokemonScore = (firstPokemon->data->attack) * 1.5 + (firstPokemon->data->hp) * 1.2;
-    float secondPokemonScore = (secondPokemon->data->attack) * 1.5 + (secondPokemon->data->hp) * 1.2;
+    double firstPokemonScore = (firstPokemon->data->attack) * 1.5 + (firstPokemon->data->hp) * 1.2;
+    double secondPokemonScore = (secondPokemon->data->attack) * 1.5 + (secondPokemon->data->hp) * 1.2;
     printf("Pokemon 1: %s (Score = %.2f)\n", firstPokemon->data->name, firstPokemonScore);
     printf("Pokemon 2: %s (Score = %.2f)\n", secondPokemon->data->name, secondPokemonScore);
     if (firstPokemonScore > secondPokemonScore)
@@ -581,7 +583,7 @@ void displayAlphabetical(OwnerNode* owner)
         for (int j = 0; j < owner->numOfPokemons - 1 - i; j++)
         {
             if (shouldSwap(queue[j]->data->name, queue[j + 1]->data->name))
-                swapPokemonData(queue[j], queue[j + 1]);
+                swapPokemonData(&(queue[j]), &(queue[j + 1]));
         }
     }
     for (int i = 0; i < owner->numOfPokemons;i++)
@@ -706,7 +708,7 @@ void evolvePokemon(OwnerNode* owner)
     if (root->data->name == NULL)
     {
         printf("Memory allocation failed\n");
-        return NULL;
+        return;
     }
     memset(root->data->name, 0x0, sizeof(pokedex[0].name));
     strcpy(root->data->name, pokedex[newId].name);
@@ -857,7 +859,7 @@ void sortOwners(int numOfOwners)
         {
             if (strcmp(nextOwner->ownerName, currentOwner->ownerName) < 0)
             {
-                swapOwnerData(nextOwner, currentOwner);
+                swapOwnerData(&nextOwner, &currentOwner);
                 nextOwner = currentOwner->next;
             }
             else
@@ -891,6 +893,7 @@ OwnerNode* findOwnerByName(const char* name,int numOfOwners)
             return currentOwner;
         currentOwner = currentOwner->next;
     }
+    return NULL;
 }
 
 void freeAllOwners() 
@@ -983,8 +986,6 @@ void enterExistingPokedexMenu(int numOfOwners)
 
         int id;
         subChoice = readIntSafe("Your choice: \n");
-        int firstId;
-        int secondId;
         switch (subChoice)
         {
         case 1:
@@ -1036,8 +1037,6 @@ void mainMenu(int numOfOwners)
         printf("7. Exit\n");
         choice = readIntSafe("Your choice: \n");
         OwnerNode* currentOwner = ownerHead;
-        int chosenOwner;
-        char direction;
         switch (choice)
         {
         case 1:
