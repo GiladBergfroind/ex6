@@ -124,7 +124,7 @@ int openPokedexMenu(int numOfOwners)
         return 1;
     }
     memset(newOwner, 0x0, sizeof(OwnerNode));
-    printf("Your Name: \n");
+    printf("Your Name: ");
     //getting new owner's name.
     newOwner->ownerName = getDynamicInput();
     if (newOwner->ownerName == NULL)
@@ -150,7 +150,7 @@ int openPokedexMenu(int numOfOwners)
         }
     }
     printf("Choose Starter:\n1. Bulbasaur\n2. Charmander\n3. Squirtle\n");
-    choice = readIntSafe("Your choice: \n");
+    choice = readIntSafe("Your choice: ");
     //putting the right starting pokemon for the new owner.
     switch (choice)
     {
@@ -185,7 +185,7 @@ int openPokedexMenu(int numOfOwners)
         ownerHead->prev = newOwner;
         newOwner->next = ownerHead;
     }
-    printf("New Pokedex created for %s with starter %s.\n",
+    printf("New Pokedex created for %s with starter %s.",
     newOwner->ownerName, newOwner->pokedexRoot->data->name);
     return 0;
 }
@@ -1042,7 +1042,7 @@ void mainMenu(int numOfOwners)
         printf("5. Sort Owners by Name\n");
         printf("6. Print Owners in a direction X times\n");
         printf("7. Exit\n");
-        choice = readIntSafe("Your choice: \n");     
+        choice = readIntSafe("Your choice: ");     
         switch (choice)
         {
         case 1:
