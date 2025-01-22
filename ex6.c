@@ -343,7 +343,7 @@ void freePokemon(OwnerNode* owner)
     if (owner->numOfPokemons == 0)
         return;
     int id = readIntSafe("Enter Pokemon ID to release: \n");
-    PokemonNode* currentPokemon = searchPokemon(root, root, id, owner->numOfPokemons);
+    PokemonNode* currentPokemon = searchPokemon(root, id, owner->numOfPokemons);
     if (currentPokemon == NULL)
     {
         printf("No Pokemon with ID %d found.", id);
@@ -398,7 +398,7 @@ const char* getTypeName(PokemonType type)
     }
 }
 
-PokemonNode* searchPokemon(PokemonNode* root,PokemonNode* prev, int id,int numOfPokemons)
+PokemonNode* searchPokemon(PokemonNode* root, int id,int numOfPokemons)
 {
     if (numOfPokemons == 0)
         return NULL;
@@ -407,13 +407,13 @@ PokemonNode* searchPokemon(PokemonNode* root,PokemonNode* prev, int id,int numOf
     if (root->data->id > id)
     {
         if (root->left != NULL)
-            return searchPokemon(root->left,root, id, numOfPokemons);
+            return searchPokemon(root->left, id, numOfPokemons);
         return NULL;
     }
     if (root->data->id < id)
     {
         if (root->right != NULL)
-            return searchPokemon(root->right,root, id, numOfPokemons);
+            return searchPokemon(root->right, id, numOfPokemons);
         return NULL;
     }
     return root;
@@ -431,8 +431,8 @@ void pokemonFight(OwnerNode* owner)
     int secondId = readIntSafe("Enter ID of the second Pokemon: \n");
     PokemonNode* firstPokemon;
     PokemonNode* secondPokemon;
-    firstPokemon = searchPokemon(owner->pokedexRoot,NULL,firstId,numOfPokemons);
-    secondPokemon = searchPokemon(owner->pokedexRoot,NULL, secondId, numOfPokemons);
+    firstPokemon = searchPokemon(owner->pokedexRoot,firstId,numOfPokemons);
+    secondPokemon = searchPokemon(owner->pokedexRoot, secondId, numOfPokemons);
     if (firstPokemon == NULL || secondPokemon == NULL)
     {
         printf("One or both Pokemon IDs not found.");
@@ -576,8 +576,6 @@ void displayAlphabetical(OwnerNode* owner)
         }
         insertCounter++;
     }
-    PokemonNode* currentPokemon = queue[0];
-    PokemonNode* nextPokemon = queue[1];
     for (int i = 0; i < owner->numOfPokemons - 1; i++)
     {
         for (int j = 0; j < owner->numOfPokemons - 1 - i; j++)
@@ -628,8 +626,7 @@ void displayMenu(OwnerNode* owner)
         printf("Pokedex is empty.\n");
         return;
     }
-
-    PokemonNode* (*sort)(OwnerNode *root) = NULL;
+        
 
     printf("Display:\n");
     printf("1. BFS (Level-Order)\n");
@@ -680,8 +677,8 @@ void evolvePokemon(OwnerNode* owner)
     }
     int oldId = readIntSafe("Enter ID of Pokemon to evolve: \n");
     int newId = oldId + 1;
-    PokemonNode* oldPokemon = searchPokemon(owner->pokedexRoot, owner->pokedexRoot, oldId, numOfPokemons);
-    PokemonNode* newPokemon = searchPokemon(owner->pokedexRoot, owner->pokedexRoot, newId, numOfPokemons);
+    PokemonNode* oldPokemon = searchPokemon(owner->pokedexRoot,oldId, numOfPokemons);
+    PokemonNode* newPokemon = searchPokemon(owner->pokedexRoot,newId, numOfPokemons);
     if (newPokemon != NULL)
     {
         printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
@@ -695,7 +692,7 @@ void evolvePokemon(OwnerNode* owner)
         printf("No Pokemon with ID %d found.\n", oldId);
         return;
     }
-    if (oldPokemon->data->CAN_EVOLVE = 0)
+    if (oldPokemon->data->CAN_EVOLVE == 0)
     {
         printf("%s (ID %d) cannot evolve.",oldPokemon->data->name,oldPokemon->data->id);
         return;
@@ -903,7 +900,7 @@ void freeAllOwners()
     while (currentOwner != NULL)
     {
         OwnerNode* tempOwner = currentOwner->next;
-        freeAllOwners(currentOwner);
+        freeOwnerNode(currentOwner);
         currentOwner = tempOwner;
     }
 }
@@ -1035,8 +1032,7 @@ void mainMenu(int numOfOwners)
         printf("5. Sort Owners by Name\n");
         printf("6. Print Owners in a direction X times\n");
         printf("7. Exit\n");
-        choice = readIntSafe("Your choice: \n");
-        OwnerNode* currentOwner = ownerHead;
+        choice = readIntSafe("Your choice: \n");     
         switch (choice)
         {
         case 1:
