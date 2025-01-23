@@ -293,11 +293,11 @@ int shouldSwap(char name1[], char name2[]);
 
 /**
  * @brief Helper to swap name & data in two PokemonNode.
- * @param a pointer to pointer to first pokemon
- * @param b pointer to pointer tosecond pokemon
+ * @param a pointer to first pokemon
+ * @param b pointer to second pokemon
  * Why we made it: Used internally by bubble sort to swap data.
  */
-void swapPokemonData(PokemonNode** a, PokemonNode** b);
+void swapPokemonData(PokemonNode* a, PokemonNode* b);
 
 
 /**
@@ -391,11 +391,11 @@ void sortOwners(int numOfOwners);
 
 /**
  * @brief Helper to swap name & pokedexRoot in two OwnerNode.
- * @param a pointer to pointer to first owner
- * @param b pointer to pointer to second owner
+ * @param a pointer to first owner
+ * @param b pointer to second owner
  * Why we made it: Used internally by bubble sort to swap data.
  */
-void swapOwnerData(OwnerNode** a, OwnerNode** b);
+void swapOwnerData(OwnerNode* a, OwnerNode* b);
 
 /* ------------------------------------------------------------
    9) Circular List Linking & Searching
