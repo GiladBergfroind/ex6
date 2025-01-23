@@ -748,7 +748,7 @@ int deletePokedex(int numOfOwners)
         currentOwner = currentOwner->next;;
     }
     currentOwner = ownerHead;
-    chosenOwner = readIntSafe("Choose a Pokedex to delete by number:\n");
+    chosenOwner = readIntSafe("Choose a Pokedex to delete by number: ");
     for (int j = 1; j < chosenOwner;j++)
         currentOwner = currentOwner->next;
     printf("Deleting %s's entire Pokedex...\n", currentOwner->ownerName);
