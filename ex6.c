@@ -689,7 +689,7 @@ void evolvePokemon(OwnerNode* owner)
         printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
             , oldPokemon->data->name, oldId);
         printf("Removing Pokemon %s (ID %d).", oldPokemon->data->name, oldId);
-        removeNodeBST(&root, oldId);
+        removeNodeBST(&(owner->pokedexRoot), oldId);
         return;
     }
     if (oldPokemon == NULL)//checks if the pokemon is in the BST.
@@ -1012,9 +1012,9 @@ void enterExistingPokedexMenu(int numOfOwners)
         {
         case 1:
             id = readIntSafe("Enter ID to add: ");
-            if (id > MAX_ID && id < MIN_ID)
+            if (id > MAX_ID || id < MIN_ID)
             {
-                printf("Invalid ID.\n");
+                printf("Invalid ID.");
                 break;
             }
             if (addPokemon(cur->pokedexRoot, id, cur) == 0)
