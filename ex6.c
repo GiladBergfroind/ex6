@@ -841,14 +841,9 @@ int shouldSwap(char name1[], char name2[])
 
 void sortOwners(int numOfOwners)
     {
-    if (numOfOwners == 0)
+    if (numOfOwners <= 1)
     {
-        printf("Pokedex is empty.\n");
-        return;
-    }
-    if (numOfOwners == 1)
-    {
-        printf("Owners sorted by name.\n");
+        printf("0 or 1 owners only => no need to sort.");
         return;
     }
     OwnerNode* currentOwner = ownerHead;
@@ -1082,7 +1077,7 @@ void mainMenu(int numOfOwners)
         case 6:
             if (numOfOwners == 0)
             {
-                printf("Pokedex is empty.\n");
+                printf("No owners.");
                 break;
             }
             printOwnersCircular();
