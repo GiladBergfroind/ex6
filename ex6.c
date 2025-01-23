@@ -216,7 +216,7 @@ PokemonNode* createPokemonNode(const PokemonData* data)
     newNode->right = NULL;
     return newNode;
 }
-
+//recursive function to insert a given pokemon to a given tree.
 void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
 {
     int id = newNode->data->id;
@@ -242,7 +242,7 @@ void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
             printf("Insertion failed.\n");
     }
 }
-
+//recursive function to add a pokemon to the tree.
 int addPokemon(PokemonNode* root, int id, OwnerNode* owner)
 {
     if (owner->numOfPokemons == 0)
@@ -251,6 +251,7 @@ int addPokemon(PokemonNode* root, int id, OwnerNode* owner)
         printf("Pokemon %s (ID %d) added.", owner->pokedexRoot->data->name, owner->pokedexRoot->data->id);
         return 0;
     }
+    //this pokemon is in the BST already.
     if (searchPokemon(root, id, owner->numOfPokemons) != NULL) {
         printf("Pokemon with ID %d is already in the Pokedex. No changes made.", id);
         return -1;
@@ -284,6 +285,7 @@ int addPokemon(PokemonNode* root, int id, OwnerNode* owner)
             return 0;
         }
     }
+    //if we are here this pokemon is already in the tree.
     printf("Pokemon with ID %d is already in the Pokedex. No changes made.", id);
     return -1;
 }
@@ -558,24 +560,26 @@ void BFSGeneric(PokemonNode* root, VisitNodeFunc visit)
 }
 void displayAlphabetical(OwnerNode* owner)
 {
+    //create a queue.
     PokemonNode** queue = malloc((owner->numOfPokemons) * sizeof(PokemonNode*));
     queue[0] = owner->pokedexRoot;
-    int insertCounter = 0;
-    int counter = 1;
-    while (insertCounter != counter)
+    int insertCounter = 0; //the next index of a pokemon in the queue array that going to be inserted.  
+    int counter = 1;//the amount of pokemons in the queue
+    while (insertCounter != counter)//while we didn't printed the whole queue.
     {
-        if (queue[insertCounter]->left != NULL)
+        if (queue[insertCounter]->left != NULL)//checks for left child, and puts them in the last spot and updates the counter.
         {
             queue[counter] = queue[insertCounter]->left;
             counter++;
         }
-        if (queue[insertCounter]->right != NULL)
+        if (queue[insertCounter]->right != NULL)//checks for left child, and puts them in the last spot and updates the counter.
         {
             queue[counter] = queue[insertCounter]->right;
             counter++;
         }
-        insertCounter++;
+        insertCounter++;//we reached the leaves of the BST therefore we need to update the insert counter.
     }
+    //bubble sorting and printing.
     for (int i = 0; i < owner->numOfPokemons - 1; i++)
     {
         for (int j = 0; j < owner->numOfPokemons - 1 - i; j++)
@@ -588,6 +592,7 @@ void displayAlphabetical(OwnerNode* owner)
         printPokemonNode(queue[i]);
     free(queue);
 }
+//same logic as the previous function.
 void displayBFS(PokemonNode* root)
 {
     PokemonNode** queue = malloc(sizeof(PokemonNode*));
@@ -679,7 +684,7 @@ void evolvePokemon(OwnerNode* owner)
     int newId = oldId + 1;
     PokemonNode* oldPokemon = searchPokemon(owner->pokedexRoot, oldId, numOfPokemons);
     PokemonNode* newPokemon = searchPokemon(owner->pokedexRoot, newId, numOfPokemons);
-    if (newPokemon != NULL)
+    if (newPokemon != NULL)//checks if the evolved form is already in the BST.
     {
         printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
             , oldPokemon->data->name, oldId);
@@ -687,12 +692,12 @@ void evolvePokemon(OwnerNode* owner)
         removeNodeBST(&root, oldId);
         return;
     }
-    if (oldPokemon == NULL)
+    if (oldPokemon == NULL)//checks if the pokemon is in the BST.
     {
         printf("No Pokemon with ID %d found.\n", oldId);
         return;
     }
-    if (oldPokemon->data->CAN_EVOLVE == 0)
+    if (oldPokemon->data->CAN_EVOLVE == 0)//checks if the pokemon can be evolved.
     {
         printf("%s (ID %d) cannot evolve.", oldPokemon->data->name, oldPokemon->data->id);
         return;
@@ -845,6 +850,7 @@ void sortOwners(int numOfOwners)
     }
     OwnerNode* currentOwner = ownerHead;
     OwnerNode* nextOwner = currentOwner->next;
+    //bubble sorting the owners by name.
     for (int i = 0; i < numOfOwners - 1; i++)
     {
         currentOwner = ownerHead;
@@ -913,6 +919,7 @@ int mergePokedexMenu(int numOfOwners)
         return -1;
     }
     printf("\n=== Merge Pokedexes ===\n");
+    //getting the first owner.
     printf("Enter name of first owner: ");
     char* ownerName = getDynamicInput();
     if (ownerName == NULL)
@@ -922,6 +929,7 @@ int mergePokedexMenu(int numOfOwners)
     }
     OwnerNode* firstOwner = findOwnerByName(ownerName, numOfOwners);
     free(ownerName);
+    //getting the second owner.
     printf("Enter name of second owner: ");
     ownerName = getDynamicInput();
     if (ownerName == NULL)
@@ -934,6 +942,7 @@ int mergePokedexMenu(int numOfOwners)
     printf("Merging %s and %s...\n", firstOwner->ownerName, secondOwner->ownerName);
     printf("Merge completed.\n");
     printf("Owner '%s' has been removed after merging.\n", secondOwner->ownerName);
+    //same logic as the BFS display function.
     PokemonNode** queue = malloc((secondOwner->numOfPokemons) * sizeof(PokemonNode*));
     queue[0] = secondOwner->pokedexRoot;
     int insertCounter = 0;
@@ -954,7 +963,6 @@ int mergePokedexMenu(int numOfOwners)
         insertCounter++;
     }
     free(queue);
-    //freeOwnerNode(firstOwner);
     removeOwnerFromCircularList(secondOwner);
 
     return 0;
