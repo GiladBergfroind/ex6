@@ -584,7 +584,7 @@ void displayAlphabetical(OwnerNode* owner)
         for (int j = 0; j < owner->numOfPokemons - 1 - i; j++)
         {
             if (shouldSwap(queue[j]->data->name, queue[j + 1]->data->name))
-                swapPokemonData(&(queue[j]), &(queue[j + 1]));
+                swapPokemonData(queue[j], queue[j + 1]);
         }
     }
     for (int i = 0; i < owner->numOfPokemons;i++)
@@ -810,18 +810,28 @@ void printOwnersCircular()
     }
 }
 
-void swapOwnerData(OwnerNode** a, OwnerNode** b) 
+void swapOwnerData(OwnerNode* a, OwnerNode* b) 
 {
-    OwnerNode* temp = *a;
-    *a = *b;
-    *b = temp;
+    OwnerNode* temp = malloc(sizeof(OwnerNode));
+    temp->numOfPokemons = a->numOfPokemons; 
+    temp->ownerName = a->ownerName;
+    temp->pokedexRoot = a->pokedexRoot;
+    a->numOfPokemons = b->numOfPokemons;
+    a->ownerName = b->ownerName;
+    a->pokedexRoot = b->pokedexRoot;
+    b->numOfPokemons = temp->numOfPokemons;
+    b->ownerName = temp->ownerName;
+    b->pokedexRoot = temp->pokedexRoot;
+    free(temp);
 }
 
-void swapPokemonData(PokemonNode** a, PokemonNode** b)
+void swapPokemonData(PokemonNode* a, PokemonNode* b)
 {
-    PokemonNode* temp = *a;
-    *a = *b;
-    *b = temp;
+    PokemonNode* temp = malloc(sizeof(PokemonNode));
+    temp->data = a->data;
+    a->data = b->data;
+    b->data = temp->data;
+    free(temp);
 }
 
 int shouldSwap(char name1[], char name2[])
@@ -830,7 +840,7 @@ int shouldSwap(char name1[], char name2[])
 }
 
 void sortOwners(int numOfOwners)
-{
+    {
     if (numOfOwners == 0)
     {
         printf("Pokedex is empty.\n");
@@ -851,8 +861,9 @@ void sortOwners(int numOfOwners)
         {
             if (strcmp(nextOwner->ownerName, currentOwner->ownerName) < 0)
             {
-                swapOwnerData(&nextOwner, &currentOwner);
-                nextOwner = currentOwner->next;
+                swapOwnerData(nextOwner, currentOwner);
+                currentOwner = nextOwner;
+                nextOwner = nextOwner->next;
             }
             else
             {
