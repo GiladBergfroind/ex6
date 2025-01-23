@@ -1099,6 +1099,7 @@ void mainMenu(int numOfOwners)
 int main()
 {
     mainMenu(0);
-    freeAllOwners();
+    if (ownerHead != NULL)
+        freeAllOwners();
     return 0;
 }
