@@ -217,15 +217,16 @@ PokemonNode* createPokemonNode(const PokemonData* data)
     return newNode;
 }
 //recursive function to insert a given pokemon to a given tree.
-void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
+void insertPokemonNode(PokemonNode* root, PokemonNode* newNode,OwnerNode* owner)
 {
     int id = newNode->data->id;
     if (root == NULL) {
-        root = createPokemonNode(&(pokedex[id - 1]));
+        owner->pokedexRoot = createPokemonNode(&(pokedex[id - 1]));
+        return;
     }
     if (root->data->id > id) {
         if (root->left != NULL) {
-            insertPokemonNode(root->left, newNode);
+            insertPokemonNode(root->left, newNode,owner);
             return;
         }
         root->left = createPokemonNode(&(pokedex[id - 1]));
@@ -234,7 +235,7 @@ void insertPokemonNode(PokemonNode* root, PokemonNode* newNode)
     }
     if (root->data->id < id) {
         if (root->right != NULL) {
-            insertPokemonNode(root->right, newNode);
+            insertPokemonNode(root->right, newNode,owner);
             return;
         }
         root->right = createPokemonNode(&(pokedex[id - 1]));
@@ -702,12 +703,12 @@ void evolvePokemon(OwnerNode* owner)
         printf("%s (ID %d) cannot evolve.", oldPokemon->data->name, oldPokemon->data->id);
         return;
     }
-    root->data->attack = pokedex[newId].attack;
-    root->data->CAN_EVOLVE = pokedex[newId].CAN_EVOLVE;
-    root->data->hp = pokedex[newId].hp;
-    root->data->id = pokedex[newId].id;
-    strcpy(root->data->name, pokedex[newId].name);
-    root->data->TYPE = pokedex[newId].TYPE;
+    removeNodeBST(&(owner->pokedexRoot), oldId);
+    owner->numOfPokemons = owner->numOfPokemons - 1;
+    newPokemon = createPokemonNode(&(pokedex[newId - 1]));
+    insertPokemonNode(owner->pokedexRoot, newPokemon, owner);
+    owner->numOfPokemons = owner->numOfPokemons + 1;
+    freePokemonNode(newPokemon);
 }
 
 void freePokemonNode(PokemonNode* node)
@@ -943,26 +944,30 @@ int mergePokedexMenu(int numOfOwners)
     printf("Merge completed.\n");
     printf("Owner '%s' has been removed after merging.\n", secondOwner->ownerName);
     //same logic as the BFS display function.
-    PokemonNode** queue = malloc((secondOwner->numOfPokemons) * sizeof(PokemonNode*));
-    queue[0] = secondOwner->pokedexRoot;
-    int insertCounter = 0;
-    int counter = 1;
-    while (insertCounter != counter)
+    if (firstOwner->pokedexRoot != NULL)
     {
-        if (queue[insertCounter]->left != NULL)
+        PokemonNode** queue = malloc((secondOwner->numOfPokemons) * sizeof(PokemonNode*));
+        queue[0] = secondOwner->pokedexRoot;
+        int insertCounter = 0;
+        int counter = 1;
+        while (insertCounter != counter)
         {
-            queue[counter] = queue[insertCounter]->left;
-            counter++;
+            if (queue[insertCounter]->left != NULL)
+            {
+                queue[counter] = queue[insertCounter]->left;
+                counter++;
+            }
+            if (queue[insertCounter]->right != NULL)
+            {
+                queue[counter] = queue[insertCounter]->right;
+                counter++;
+            }
+            insertPokemonNode(firstOwner->pokedexRoot, queue[insertCounter], firstOwner);
+            insertCounter++;
+            firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
         }
-        if (queue[insertCounter]->right != NULL)
-        {
-            queue[counter] = queue[insertCounter]->right;
-            counter++;
-        }
-        insertPokemonNode(firstOwner->pokedexRoot, queue[insertCounter]);
-        insertCounter++;
+        free(queue);
     }
-    free(queue);
     removeOwnerFromCircularList(secondOwner);
 
     return 0;
@@ -1103,3 +1108,4 @@ int main()
         freeAllOwners();
     return 0;
 }
+
