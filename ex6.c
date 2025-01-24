@@ -674,7 +674,6 @@ void displayMenu(OwnerNode* owner)
 
 void evolvePokemon(OwnerNode* owner)
 {
-    PokemonNode* root = owner->pokedexRoot;
     int numOfPokemons = owner->numOfPokemons;
     if (numOfPokemons == 0)
     {
