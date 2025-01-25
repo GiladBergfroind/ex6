@@ -250,6 +250,7 @@ int insertPokemonNode(PokemonNode* root, PokemonNode* newNode,OwnerNode* owner)
         else
             return 0;
     }
+    return -1;
 }
 //recursive function to add a pokemon to the tree.
 int addPokemon(PokemonNode* root, int id, OwnerNode* owner)
