@@ -245,7 +245,7 @@ int insertPokemonNode(PokemonNode* root, PokemonNode* newNode,OwnerNode* owner)
         if (root->right == NULL)
         {
             printf("Insertion failed.\n");
-            return 1;
+            return -1;
         }
         else
             return 0;
@@ -362,7 +362,8 @@ int freePokemon(OwnerNode* owner)
         return 0;
     }
     printf("Removing Pokemon %s (ID %d).", currentPokemon->data->name, id);
-    removeNodeBST(&(owner->pokedexRoot), id);
+    if (removeNodeBST(&(owner->pokedexRoot), id) == 0)
+        owner->numOfPokemons = owner->numOfPokemons - 1;
     return 1;
 }
 
@@ -700,10 +701,11 @@ void evolvePokemon(OwnerNode* owner)
     }
     if (newPokemon != NULL)//checks if the evolved form is already in the BST.
     {
-        printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
+        printf("Evolution ID %d (%s) already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
             , oldPokemon->data->name, oldId);
         printf("Removing Pokemon %s (ID %d).", oldPokemon->data->name, oldId);
-        removeNodeBST(&(owner->pokedexRoot), oldId);
+        if(removeNodeBST(&(owner->pokedexRoot), oldId) == 0)
+            owner->numOfPokemons = owner->numOfPokemons - 1;
         return;
     }
     if (oldPokemon->data->CAN_EVOLVE == 0)//checks if the pokemon can be evolved.
@@ -711,8 +713,8 @@ void evolvePokemon(OwnerNode* owner)
         printf("%s (ID %d) cannot evolve.", oldPokemon->data->name, oldPokemon->data->id);
         return;
     }
-    removeNodeBST(&(owner->pokedexRoot), oldId);
-    owner->numOfPokemons = owner->numOfPokemons - 1;
+    if(removeNodeBST(&(owner->pokedexRoot), oldId) == 0)
+        owner->numOfPokemons = owner->numOfPokemons - 1;
     newPokemon = createPokemonNode(&(pokedex[newId - 1]));
     if(insertPokemonNode(owner->pokedexRoot, newPokemon, owner) == 0)
         owner->numOfPokemons = owner->numOfPokemons + 1;
@@ -969,13 +971,11 @@ int mergePokedexMenu(int numOfOwners)
             {
                 queue[counter] = queue[insertCounter]->left;
                 counter++;
-                firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
             }
             if (queue[insertCounter]->right != NULL)
             {
                 queue[counter] = queue[insertCounter]->right;
                 counter++;
-                firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
             }
             if (insertPokemonNode(firstOwner->pokedexRoot, queue[insertCounter], firstOwner) == 0)
                 firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
@@ -984,7 +984,7 @@ int mergePokedexMenu(int numOfOwners)
         free(queue);
     }
     removeOwnerFromCircularList(secondOwner);
-
+    numOfOwners--;
     return 0;
 }
 
