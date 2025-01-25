@@ -684,17 +684,17 @@ void evolvePokemon(OwnerNode* owner)
     int newId = oldId + 1;
     PokemonNode* oldPokemon = searchPokemon(owner->pokedexRoot, oldId, numOfPokemons);
     PokemonNode* newPokemon = searchPokemon(owner->pokedexRoot, newId, numOfPokemons);
+    if (oldPokemon == NULL)//checks if the pokemon is in the BST.
+    {
+        printf("No Pokemon with ID %d found.\n", oldId);
+        return;
+    }
     if (newPokemon != NULL)//checks if the evolved form is already in the BST.
     {
         printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
             , oldPokemon->data->name, oldId);
         printf("Removing Pokemon %s (ID %d).", oldPokemon->data->name, oldId);
         removeNodeBST(&(owner->pokedexRoot), oldId);
-        return;
-    }
-    if (oldPokemon == NULL)//checks if the pokemon is in the BST.
-    {
-        printf("No Pokemon with ID %d found.\n", oldId);
         return;
     }
     if (oldPokemon->data->CAN_EVOLVE == 0)//checks if the pokemon can be evolved.
