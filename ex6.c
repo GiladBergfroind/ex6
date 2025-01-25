@@ -217,30 +217,38 @@ PokemonNode* createPokemonNode(const PokemonData* data)
     return newNode;
 }
 //recursive function to insert a given pokemon to a given tree.
-void insertPokemonNode(PokemonNode* root, PokemonNode* newNode,OwnerNode* owner)
+int insertPokemonNode(PokemonNode* root, PokemonNode* newNode,OwnerNode* owner)
 {
     int id = newNode->data->id;
     if (root == NULL) {
         owner->pokedexRoot = createPokemonNode(&(pokedex[id - 1]));
-        return;
+        return 0;
     }
     if (root->data->id > id) {
         if (root->left != NULL) {
-            insertPokemonNode(root->left, newNode,owner);
-            return;
+            return insertPokemonNode(root->left, newNode, owner);
         }
         root->left = createPokemonNode(&(pokedex[id - 1]));
         if (root->left == NULL)
+        {
             printf("Insertion failed.\n");
+            return -1;
+        }
+        else 
+            return 0;
     }
     if (root->data->id < id) {
         if (root->right != NULL) {
-            insertPokemonNode(root->right, newNode,owner);
-            return;
+            return insertPokemonNode(root->right, newNode,owner);
         }
         root->right = createPokemonNode(&(pokedex[id - 1]));
         if (root->right == NULL)
+        {
             printf("Insertion failed.\n");
+            return 1;
+        }
+        else
+            return 0;
     }
 }
 //recursive function to add a pokemon to the tree.
@@ -705,8 +713,8 @@ void evolvePokemon(OwnerNode* owner)
     removeNodeBST(&(owner->pokedexRoot), oldId);
     owner->numOfPokemons = owner->numOfPokemons - 1;
     newPokemon = createPokemonNode(&(pokedex[newId - 1]));
-    insertPokemonNode(owner->pokedexRoot, newPokemon, owner);
-    owner->numOfPokemons = owner->numOfPokemons + 1;
+    if(insertPokemonNode(owner->pokedexRoot, newPokemon, owner) == 0)
+        owner->numOfPokemons = owner->numOfPokemons + 1;
     freePokemonNode(newPokemon);
 }
 
@@ -960,15 +968,17 @@ int mergePokedexMenu(int numOfOwners)
             {
                 queue[counter] = queue[insertCounter]->left;
                 counter++;
+                firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
             }
             if (queue[insertCounter]->right != NULL)
             {
                 queue[counter] = queue[insertCounter]->right;
                 counter++;
+                firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
             }
-            insertPokemonNode(firstOwner->pokedexRoot, queue[insertCounter], firstOwner);
+            if (insertPokemonNode(firstOwner->pokedexRoot, queue[insertCounter], firstOwner) == 0)
+                firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
             insertCounter++;
-            firstOwner->numOfPokemons = firstOwner->numOfPokemons + 1;
         }
         free(queue);
     }
