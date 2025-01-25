@@ -939,11 +939,16 @@ int mergePokedexMenu(int numOfOwners)
     }
     OwnerNode* secondOwner = findOwnerByName(ownerName, numOfOwners);
     free(ownerName);
+    if ((firstOwner == NULL) || (secondOwner == NULL))
+    {
+        printf("One or both owners not found.");
+        return -1;  
+    }
     printf("Merging %s and %s...\n", firstOwner->ownerName, secondOwner->ownerName);
     printf("Merge completed.\n");
     printf("Owner '%s' has been removed after merging.\n", secondOwner->ownerName);
     //same logic as the BFS display function.
-    if (firstOwner->pokedexRoot != NULL)
+    if (secondOwner->pokedexRoot != NULL)
     {
         PokemonNode** queue = malloc((secondOwner->numOfPokemons) * sizeof(PokemonNode*));
         queue[0] = secondOwner->pokedexRoot;
@@ -1107,4 +1112,3 @@ int main()
         freeAllOwners();
     return 0;
 }
-
