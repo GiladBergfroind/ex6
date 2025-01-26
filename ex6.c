@@ -700,7 +700,7 @@ void evolvePokemon(OwnerNode* owner)
     }
     if (newPokemon != NULL)//checks if the evolved form is already in the BST.
     {
-        printf("Evolution ID %d (%s)already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
+        printf("Evolution ID %d (%s) already in the Pokedex.Releasing %s(ID %d).\n", newId, newPokemon->data->name
             , oldPokemon->data->name, oldId);
         printf("Removing Pokemon %s (ID %d).", oldPokemon->data->name, oldId);
         removeNodeBST(&(owner->pokedexRoot), oldId);
